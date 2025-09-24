@@ -1,9 +1,9 @@
-#include <array>
 #include <cstdio>
 #include <iostream>
-#include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 #define BUFFER_SIZE 4096
 
 using namespace std;
@@ -28,7 +28,7 @@ string getPage(string input) {
   return result;
 }
 
-std::vector<string> split(const string &s, char delimiter) {
+std::vector<std::string> split(const string &s, char delimiter) {
   vector<string> tokens;
   string token;
   istringstream tokenStream(s);
@@ -40,7 +40,9 @@ std::vector<string> split(const string &s, char delimiter) {
 
 int main() {
   string res = getPage("man");
-  vector<string> res2 = split(res, '[][]');
-  cout << res2 << endl;
-  return 0
+  std::vector<std::string> res2 = split(res, '\n');
+  for (auto line : res2) {
+    cout << line << endl;
+  }
+  return 0;
 }
