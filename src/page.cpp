@@ -1,4 +1,5 @@
-#include "page.h"
+#include "page.hpp"
+#include <iostream>
 #include <stdexcept>
 
 Page::Page(std::vector<Section> sections, const std::string &title)
@@ -46,6 +47,19 @@ Section &Page::removeSection(const std::string &title) {
     }
   }
   throw std::invalid_argument("Section with the given title not found");
+}
+
+const std::size_t Page::getSectionCount() const { return sections.size(); }
+
+void Page::printSections() {
+  for (auto i = 0; i < getSectionCount(); ++i) {
+    auto sec = getSection(i);
+    std::cout << "Section Title: " << sec.getTitle() << std::endl;
+    std::cout << "Section Content: " << sec.getContent() << std::endl;
+    std::cout << std::endl;
+    std::cout << "-----------------------------------------------------"
+              << std::endl;
+  }
 }
 
 void Page::setTitle(const std::string &title) { this->title = title; }

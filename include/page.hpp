@@ -1,7 +1,8 @@
 #ifndef PAGE_H
 #define PAGE_H
 
-#include "section.h"
+#include "section.hpp"
+#include <cstddef>
 #include <string>
 #include <vector>
 
@@ -18,6 +19,8 @@ public:
 
   void setTitle(const std::string &title);
   void addSection(const Section &section);
+  const std::size_t getSectionCount() const;
+  void printSections();
 
 private:
   std::string title;

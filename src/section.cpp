@@ -1,4 +1,4 @@
-#include "section.h"
+#include "section.hpp"
 Section::Section(const std::string &title, const std::string &content)
     : title(title), content(content) {}
 Section::Section(const Section &other)

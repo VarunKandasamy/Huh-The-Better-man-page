@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/HuhTheBetterManPage.dir/link.d CMakeFiles/HuhTheBetterManPage.dir/src/page.cpp.o CMakeFiles/HuhTheBetterManPage.dir/src/parser.cpp.o CMakeFiles/HuhTheBetterManPage.dir/src/section.cpp.o -o HuhTheBetterManPage
