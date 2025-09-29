@@ -4,7 +4,7 @@
 #include <string>
 class Formatter {
   public:
-    static const std::string REESET;
+    static const std::string RESET;
     static const std::string BOLD;
     static const std::string FAINT;
     static const std::string ITALIC;
@@ -18,8 +18,8 @@ class Formatter {
     static const std::string CYAN;
     static const std::string WHITE;
 
-    std::string format(const std::string &text, const std::string &style);
+    std::string format(const std::string &text, std::string style);
   private:
-}
+};
 
 #endif // FORMATTER_H

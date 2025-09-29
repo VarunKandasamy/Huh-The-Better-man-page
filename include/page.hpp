@@ -14,6 +14,10 @@ public:
 
   Section &getSection(int &index);
   Section &getSection(const std::string &title);
+  const Section &getSection(int &index) const;
+  const Section &getSection(const std::string &title) const;
+
+  bool hasSection(const std::string &title) const;
   Section &removeSection(int &index);
   Section &removeSection(const std::string &title);
 
@@ -21,6 +25,8 @@ public:
   void addSection(const Section &section);
   const std::size_t getSectionCount() const;
   void printSections();
+  std::vector<Section> getSections() const;
+  void printOutput() const;
 
 private:
   std::string title;

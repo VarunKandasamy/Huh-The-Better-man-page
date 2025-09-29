@@ -29,6 +29,31 @@ Section &Page::getSection(const std::string &title) {
   throw std::invalid_argument("Section with the given title not found");
 }
 
+const Section &Page::getSection(int &index) const {
+  if (index < 0 || index >= sections.size()) {
+    throw std::out_of_range("Index out of range");
+  }
+  return sections[index];
+}
+
+const Section &Page::getSection(const std::string &title) const {
+  for (const auto &section : sections) {
+    if (section.getTitle() == title) {
+      return section;
+    }
+  }
+  throw std::invalid_argument("Section with the given title not found");
+}
+
+bool Page::hasSection(const std::string &title) const {
+  for (const auto &section : sections) {
+    if (section.getTitle() == title) {
+      return true;
+    }
+  }
+  return false;
+}
+
 Section &Page::removeSection(int &index) {
   if (index < 0 || index >= sections.size()) {
     throw std::out_of_range("Index out of range");
@@ -62,6 +87,17 @@ void Page::printSections() {
   }
 }
 
+void Page::printOutput() const {
+  for(auto i =0; i < getSectionCount(); ++i) {
+    auto sec = getSection(i);
+    std::cout << sec.getTitle() << std::endl;
+    std::cout << sec.getContent() << std::endl;
+    std::cout << std::endl;
+  }
+}
+
 void Page::setTitle(const std::string &title) { this->title = title; }
 
 void Page::addSection(const Section &section) { sections.push_back(section); }
+
+std::vector<Section> Page::getSections() const { return sections; }

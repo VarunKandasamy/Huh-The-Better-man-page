@@ -3,11 +3,25 @@
 #include <filesystem>
 #include <iostream>
 #include <toml++/toml.h>
+#include <cstdlib>
 
 namespace fs=std::filesystem;
 
-Assembler::Assembler(const std::string& path) : path(path) {
-  loadConfig();
+// Assembler::Assembler(const std::string& path) : path(path) {
+//   loadConfig();
+// }
+
+std::string expandHome(const std::string& path) {
+    if (!path.empty() && path[0] == '~') {
+        const char* home = std::getenv("HOME");
+        if (home) return std::string(home) + path.substr(1);
+    }
+    return path;
+}
+
+// Then in your constructor:
+Assembler::Assembler(const std::string& path) : path(expandHome(path)) {
+    loadConfig();
 }
 
 template<typename T>
@@ -87,24 +101,24 @@ void Assembler::loadStylesFromToml(const fs::path& path) {
         if (!node.is_table()) continue;
         if (key == "default") continue;
 
-        std::string sectionName = key.str();
+        std::string sectionName{key.str()};
         sectionStyle s = parseSectionStyle(*node.as_table(), defaultStyle);
-        sectionStyles[sectionName] = s;
+        styleLookup[sectionName] = s;
         std::cout << "Loaded style for [" << sectionName << "] from " << path << "\n";
     }
 }
 
 // returns a new section with the given style applied
-Seciton Assembler::style(const sectionStyle& style, const Section& section) const {
+Section Assembler::style(const sectionStyle& style, const Section& section) const {
   Section styledSection = section;
   Formatter formatter;
 
   //first bold all sections
   if (style.title.bold) {
-    styledSection.title = formatter::format(styledSection.title, Formatter::BOLD);
+    styledSection.setTitle(formatter.format(styledSection.getTitle(), Formatter::BOLD));
   }
   if(style.section.bold) {
-    styledSection.content = formatter::format(styledSection.content, Formatter::BOLD);
+    styledSection.setContent(formatter.format(styledSection.getContent(), Formatter::BOLD));
   }
   // if(style.command.bold) {
   //   styledSection.commands = formatter::format(styledSection.commands, Formatter::BOLD);
@@ -112,10 +126,10 @@ Seciton Assembler::style(const sectionStyle& style, const Section& section) cons
 
   //then italicize all sections
   if (style.title.italic) {
-    styledSection.title = formatter::format(styledSection.title, Formatter::ITALIC);
+    styledSection.setTitle(formatter.format(styledSection.getTitle(), Formatter::ITALIC));
   }
   if(style.section.italic) {
-    styledSection.content = formatter::format(styledSection.content, Formatter::ITALIC);
+    styledSection.setContent(formatter.format(styledSection.getContent(), Formatter::ITALIC));
   }
   // if(style.command.italic) {
   //   styledSection.commands = formatter::format(styledSection.commands, Formatter::ITALIC);
@@ -123,23 +137,23 @@ Seciton Assembler::style(const sectionStyle& style, const Section& section) cons
 
   //then underline all sections
   if (style.title.underline) {
-    styledSection.title = formatter::format(styledSection.title, Formatter::UNDERLINE);
+    styledSection.setTitle(formatter.format(styledSection.getTitle(), Formatter::UNDERLINE));
   }
   if(style.section.underline) {
-    styledSection.content = formatter::format(styledSection.content, Formatter::UNDERLINE);
+    styledSection.setContent(formatter.format(styledSection.getContent(), Formatter::UNDERLINE));
   }
   // if(style.command.underline) {
   //   styledSection.commands = formatter::format(styledSection.commands, Formatter::UNDERLINE);
   // }
 
   //finally color all sections
-  styledSection.title = formatter::format(styledSection.title, style.title.color);
-  styledSection.content = formatter::format(styledSection.content, style.section.color);
+  styledSection.setTitle(formatter.format(styledSection.getTitle(), style.title.color));
+  styledSection.setContent(formatter.format(styledSection.getContent(), style.section.color));
   // styledSection.commands = formatter::format(styledSection.commands, style.command.color);
 
   // reset all styles at the end of each section
-  styledSection.title += Formatter::RESET;
-  styledSection.content += Formatter::RESET;
+  styledSection.setTitle(styledSection.getTitle() + Formatter::RESET);
+  styledSection.setContent(styledSection.getContent() + Formatter::RESET);
   // styledSection.commands += Formatter::RESET;
 
   return styledSection;
@@ -151,27 +165,27 @@ Page Assembler::assemble(const Page& rhs) {
   // Prepend sections
   for (const auto& sectionName : prependSections) {
     if (rhs.hasSection(sectionName) && !skippedSections.contains(sectionName)) {
-      sectionStyle style = sectionStyles.count(sectionName) ? sectionStyles[sectionName] : defaultStyle;
-      Section newSection = style(style, rhs.getSection(sectionName));
+      sectionStyle style = styleLookup.count(sectionName) ? styleLookup[sectionName] : defaultStyle;
+      Section newSection = this->style(style, rhs.getSection(sectionName));
       assembledPage.addSection(newSection);
     }
   }
 
   // Main sections
   for (const auto& section : rhs.getSections()) {
-    if (prependSections.contains(section.name) || postpendSections.contains(section.name) || skippedSections.contains(section.name)) {
+    if (prependSections.contains(section.getTitle()) || postpendSections.contains(section.getTitle()) || skippedSections.contains(section.getTitle())) {
       continue; // Skip sections that are already handled or skipped
     }
-    sectionStyle style = sectionStyles.count(section.name) ? sectionStyles[section.name] : defaultStyle;
-    Section newSection = style(style, section);
+    sectionStyle style = styleLookup.count(section.getTitle()) ? styleLookup[section.getTitle()] : defaultStyle;
+    Section newSection = this->style(style, section);
     assembledPage.addSection(newSection);
   }
 
   // Append sections
   for (const auto& sectionName : postpendSections) {
     if (rhs.hasSection(sectionName) && !skippedSections.contains(sectionName)) {
-      sectionStyle style = sectionStyles.count(sectionName) ? sectionStyles[sectionName] : defaultStyle;
-      Section newSection = style(style, rhs.getSection(sectionName));
+      sectionStyle style = styleLookup.count(sectionName) ? styleLookup[sectionName] : defaultStyle;
+      Section newSection = this->style(style, rhs.getSection(sectionName));
       assembledPage.addSection(newSection);
     }
   }

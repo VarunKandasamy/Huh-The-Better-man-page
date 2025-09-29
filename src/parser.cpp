@@ -82,13 +82,3 @@ Page Parser::parseToPage(const string &rawText) {
   return page;
 }
 
-// test the section parser on man ls
-int main() {
-  Parser Parser;
-  string cmd = "man ls";
-  auto strPage = Parser.getPage(cmd);
-  auto result = Parser.parseToPage(strPage);
-
-  result.printSections();
-  return 0;
-}

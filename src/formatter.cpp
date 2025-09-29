@@ -14,7 +14,7 @@ const std::string Formatter::MAGENTA = "\033[35m";
 const std::string Formatter::CYAN    = "\033[36m";
 const std::string Formatter::WHITE   = "\033[37m";
 
-std::string Formatter::format(const std::string &text, const std::string &style) {
+std::string Formatter::format(const std::string &text, std::string style) {
   if(style == "RED") {
     style=Formatter::RED;
   }
