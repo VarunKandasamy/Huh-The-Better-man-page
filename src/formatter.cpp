@@ -15,5 +15,39 @@ const std::string Formatter::CYAN    = "\033[36m";
 const std::string Formatter::WHITE   = "\033[37m";
 
 std::string Formatter::format(const std::string &text, const std::string &style) {
-    return style + text + RESET;
+  if(style == "RED") {
+    style=Formatter::RED;
+  }
+  else if(style == "GREEN") {
+    style=Formatter::GREEN;
+  }
+  else if(style == "YELLOW") {
+    style=Formatter::YELLOW;
+  }
+  else if(style == "BLUE") {
+    style=Formatter::BLUE;
+  }
+  else if(style == "MAGENTA") {
+    style=Formatter::MAGENTA;
+  }
+  else if(style == "CYAN") {
+    style=Formatter::CYAN;
+  }
+  else if(style == "WHITE") {
+    style=Formatter::WHITE;
+  }
+  else if(style == "BOLD") {
+    style=Formatter::BOLD;
+  }
+  else if(style == "ITALIC") {
+    style=Formatter::ITALIC;
+  }
+  else if(style == "UNDERLINE") {
+    style=Formatter::UNDERLINE;
+  }
+  else {
+    // If the style is not recognized, return the text unmodified
+    return text;
+  }
+  return style + text;
 }
