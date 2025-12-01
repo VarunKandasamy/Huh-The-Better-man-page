@@ -91,7 +91,7 @@ void Assembler::loadStylesFromToml(const fs::path& path) {
         if (key == "default") {
             // merge defaults into existing defaultStyle
             defaultStyle = parseSectionStyle(*node.as_table(), defaultStyle);
-            std::cout << "Applied [default] from " << path << "\n";
+            // std::cout << "Applied [default] from " << path << "\n";
             break; // only one default per file
         }
     }
@@ -101,10 +101,19 @@ void Assembler::loadStylesFromToml(const fs::path& path) {
         if (!node.is_table()) continue;
         if (key == "default") continue;
 
+
         std::string sectionName{key.str()};
-        sectionStyle s = parseSectionStyle(*node.as_table(), defaultStyle);
+
+        toml::table* sectionTbl = node.as_table();
+
+        bool should_skip = sectionTbl->operator[]("skip").value_or(false);
+        if (should_skip) {
+            skippedSections.insert(sectionName);
+        }
+
+        sectionStyle s = parseSectionStyle(*sectionTbl, defaultStyle);
         styleLookup[sectionName] = s;
-        std::cout << "Loaded style for [" << sectionName << "] from " << path << "\n";
+        // std::cout << "Loaded style for [" << sectionName << "] from " << path << "\n";
     }
 }
 

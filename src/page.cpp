@@ -1,6 +1,8 @@
 #include "page.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
+#include <cstdio>
 
 Page::Page(std::vector<Section> sections, const std::string &title)
     : sections(std::move(sections)), title(title) {}
@@ -95,6 +97,34 @@ void Page::printOutput() const {
     std::cout << std::endl;
   }
 }
+
+/* depricated due to visual bugs. piped into less -r specified in bin
+void Page::printOutput() const {
+    std::ostringstream oss;
+
+    // Collect all sections into a string
+    for (auto i = 0; i < getSectionCount(); ++i) {
+        auto sec = getSection(i);
+        oss << sec.getTitle() << "\n";
+        oss << sec.getContent() << "\n\n";
+    }
+
+    std::string output = oss.str();
+
+    // Open a pipe to less -R
+    FILE* pipe = popen("less -r", "w");  // -R preserves ANSI codes
+    if (!pipe) {
+        std::cerr << "Failed to open pager\n";
+        return;
+    }
+
+    // Write all output at once
+    fputs(output.c_str(), pipe);
+    fflush(pipe);
+
+    // Close the pipe (less exits when user presses q)
+    pclose(pipe);
+}*/
 
 void Page::setTitle(const std::string &title) { this->title = title; }
 

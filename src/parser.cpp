@@ -11,7 +11,7 @@ using namespace std;
 // takes in command and outputs the result of running the command
 string Parser::getPage(const string &input) {
   FILE *ptr;
-  cout << "input: " << input << endl;
+  // cout << "input: " << input << endl;
 
   ptr = popen(input.c_str(), "r");
   if (ptr == nullptr) {
@@ -38,8 +38,8 @@ std::vector<std::string> Parser::split(const string &s, char delimiter) {
   while (getline(tokenStream, token, delimiter)) {
     tokens.push_back(token);
   }
-  cout << "finished split" << endl;
-  cout << tokens.size() << endl;
+  // cout << "finished split" << endl;
+  // cout << tokens.size() << endl;
   return tokens;
 }
 
