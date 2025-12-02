@@ -111,6 +111,16 @@ void Assembler::loadStylesFromToml(const fs::path& path) {
             skippedSections.insert(sectionName);
         }
 
+        bool should_prep = sectionTbl->operator[]("prepend").value_or(false);
+        if (should_prep) {
+            prependSections.insert(sectionName);
+        }
+
+        bool should_post = sectionTbl->operator[]("postpend").value_or(false);
+        if (should_post) {
+            postpendSections.insert(sectionName);
+        }
+
         sectionStyle s = parseSectionStyle(*sectionTbl, defaultStyle);
         styleLookup[sectionName] = s;
         // std::cout << "Loaded style for [" << sectionName << "] from " << path << "\n";
