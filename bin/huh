@@ -8,6 +8,26 @@ if [[ ! -x "$BINARY" ]]; then
     exit 1
 fi
 
+if [[ $# -eq 0 ]]; then
+    if ! command -v fzf &>/dev/null; then
+        echo "huh: no command given. Install fzf for interactive man page search." >&2
+        exit 1
+    fi
+    if command -v bat &>/dev/null; then
+        preview_cmd='man {1} 2>/dev/null | bat --style=plain --color=always --language=man --paging=never'
+    else
+        preview_cmd='man {1} 2>/dev/null | col -bx | head -60'
+    fi
+    selection=$(man -k . 2>/dev/null \
+        | sort \
+        | fzf --prompt="huh> " \
+              --preview="$preview_cmd" \
+              --preview-window=right:60% \
+        | awk '{print $1}')
+    [[ -z "$selection" ]] && exit 0
+    exec "$0" "$selection"
+fi
+
 if command -v bat &>/dev/null; then
     "$BINARY" "$@" | bat --style=plain --paging=always --color=always
 else
