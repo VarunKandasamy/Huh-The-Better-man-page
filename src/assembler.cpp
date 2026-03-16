@@ -134,10 +134,10 @@ Section Assembler::style(const sectionStyle& style, const Section& section) cons
 
   //first bold all sections
   if (style.title.bold) {
-    styledSection.setTitle(formatter.format(styledSection.getTitle(), Formatter::BOLD));
+    styledSection.setTitle(formatter.format(styledSection.getTitle(), "BOLD"));
   }
   if(style.section.bold) {
-    styledSection.setContent(formatter.format(styledSection.getContent(), Formatter::BOLD));
+    styledSection.setContent(formatter.format(styledSection.getContent(), "BOLD"));
   }
   // if(style.command.bold) {
   //   styledSection.commands = formatter::format(styledSection.commands, Formatter::BOLD);
@@ -145,10 +145,10 @@ Section Assembler::style(const sectionStyle& style, const Section& section) cons
 
   //then italicize all sections
   if (style.title.italic) {
-    styledSection.setTitle(formatter.format(styledSection.getTitle(), Formatter::ITALIC));
+    styledSection.setTitle(formatter.format(styledSection.getTitle(), "ITALIC"));
   }
   if(style.section.italic) {
-    styledSection.setContent(formatter.format(styledSection.getContent(), Formatter::ITALIC));
+    styledSection.setContent(formatter.format(styledSection.getContent(), "ITALIC"));
   }
   // if(style.command.italic) {
   //   styledSection.commands = formatter::format(styledSection.commands, Formatter::ITALIC);
@@ -156,10 +156,10 @@ Section Assembler::style(const sectionStyle& style, const Section& section) cons
 
   //then underline all sections
   if (style.title.underline) {
-    styledSection.setTitle(formatter.format(styledSection.getTitle(), Formatter::UNDERLINE));
+    styledSection.setTitle(formatter.format(styledSection.getTitle(), "UNDERLINE"));
   }
   if(style.section.underline) {
-    styledSection.setContent(formatter.format(styledSection.getContent(), Formatter::UNDERLINE));
+    styledSection.setContent(formatter.format(styledSection.getContent(), "UNDERLINE"));
   }
   // if(style.command.underline) {
   //   styledSection.commands = formatter::format(styledSection.commands, Formatter::UNDERLINE);
