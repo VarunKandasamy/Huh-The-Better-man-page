@@ -18,20 +18,25 @@ Huh wraps the standard `man` command and renders its output with configurable co
 ## Installation
 
 **Requirements:** CMake 3.31+, a C++20-compatible compiler (GCC or Clang), and `man` installed.
+**Optional:** [`bat`](https://github.com/sharkdp/bat) for the best pager experience (falls back to `less -R` if unavailable).
 
 ```bash
 git clone https://github.com/your-username/Huh-The-Better-man-page
 cd Huh-The-Better-man-page
 cmake -B build -S .
 cmake --build build
+bash install.sh
 ```
 
-The binary is placed at `build/HuhTheBetterManPage`. Add it to your PATH or alias it:
+`install.sh` symlinks `bin/huh` into `~/.local/bin` and installs completions for whichever shells are present (bash, zsh, fish). Ensure `~/.local/bin` is in your `PATH`.
+
+To update after pulling new changes, just rebuild:
 
 ```bash
-# In your shell config (~/.bashrc, ~/.zshrc, etc.)
-alias huh="/path/to/build/HuhTheBetterManPage"
+cmake --build build
 ```
+
+The symlink continues to point at the repo, so no reinstall is needed.
 
 ---
 
