@@ -1,0 +1,3 @@
+#compdef huh
+
+_man "$@"

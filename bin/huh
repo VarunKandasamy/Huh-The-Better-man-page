@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "$(realpath "$0")")" && pwd)"
+BINARY="$SCRIPT_DIR/../build/HuhTheBetterManPage"
+
+if [[ ! -x "$BINARY" ]]; then
+    echo "huh: binary not found at $BINARY — run 'cmake --build build' first" >&2
+    exit 1
+fi
+
+if command -v bat &>/dev/null; then
+    "$BINARY" "$@" | bat --style=plain --paging=always --color=always
+else
+    "$BINARY" "$@" | less -R
+fi
